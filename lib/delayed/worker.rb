@@ -141,7 +141,9 @@ module Delayed
             break if stop?
 
             if count.zero?
+              say "#{job.name} sleeping at %s" % Time.now.strftime("%T")
               sleep(self.class.sleep_delay)
+              say "#{job.name} unsleeping at %s" % Time.now.strftime("%T")
             else
               say "#{count} jobs processed at %.4f j/s, %d failed ..." % [count / realtime, result.last]
             end
@@ -181,10 +183,12 @@ module Delayed
     end
 
     def run(job)
+      say "#{job.name} started at %s" % Time.now.strftime("%T")
       runtime =  Benchmark.realtime do
         Timeout.timeout(self.class.max_run_time.to_i) { job.invoke_job }
         job.destroy
       end
+      say "#{job.name} ended at %s" % Time.now.strftime("%T")
       say "#{job.name} completed after %.4f" % runtime
       return true  # did work
     rescue DeserializationError => error

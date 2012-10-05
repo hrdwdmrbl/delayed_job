@@ -141,9 +141,9 @@ module Delayed
             break if stop?
 
             if count.zero?
-              say "#{job.name} sleeping at %s" % Time.now.strftime("%T")
+              say "sleeping at %s" % Time.now.strftime("%T")
               sleep(self.class.sleep_delay)
-              say "#{job.name} unsleeping at %s" % Time.now.strftime("%T")
+              say "unsleeping at %s" % Time.now.strftime("%T")
             else
               say "#{count} jobs processed at %.4f j/s, %d failed ..." % [count / realtime, result.last]
             end
